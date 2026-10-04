@@ -23,7 +23,6 @@
 <meta name="twitter:description" content="Цена фиксируется в договоре, оплата по этапам после приёмки, фотоотчёт каждый вечер.">
 <meta name="twitter:image" content="https://automatorr192-dev.github.io/rovno/assets/img/og.jpg">
 <link rel="preload" href="assets/fonts/geologica-300-700-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="modulepreload" href="assets/scene.js">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -73,12 +72,6 @@
 @font-face{font-family:"Geologica";src:url("assets/fonts/geologica-300-700-cyrillic.woff2") format("woff2");font-weight:300 700;font-style:normal;font-display:swap;unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
 @font-face{font-family:"Geologica";src:url("assets/fonts/geologica-300-700-latin-ext.woff2") format("woff2");font-weight:300 700;font-style:normal;font-display:swap;unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:"Geologica";src:url("assets/fonts/geologica-300-700-latin.woff2") format("woff2");font-weight:300 700;font-style:normal;font-display:swap;unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/plex-400-cyrillic.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
-@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/plex-400-latin-ext.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/plex-400-latin.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/plex-500-cyrillic.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
-@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/plex-500-latin-ext.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:"IBM Plex Mono";src:url("assets/fonts/plex-500-latin.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 :root{
   --bg:#e9e9e5; --bg-2:#e0e0db; --paper:#f8f8f5; --line:#d0d0c9; --line-2:#b9b9b1;
   --ink:#141518; --ink-2:#34363b; --mut:#5a5c61;
@@ -86,7 +79,7 @@
   --r:.375rem;
   --ease:cubic-bezier(.22,1,.36,1); --snap:cubic-bezier(.2,.8,.2,1);
   --f:"Geologica",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --fm:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --fm:var(--f);
   --nav-h:4.25rem; --gut:2.5rem; --maxw:88rem;
 }
 html{font-size:16px; -webkit-text-size-adjust:100%; scroll-padding-top:calc(var(--nav-h) + 1rem)}
@@ -104,7 +97,7 @@ button,input,select{font:inherit; color:inherit}
 .skip{position:absolute; left:1rem; top:-4rem; z-index:100; background:var(--ink); color:#fff; padding:.6rem 1rem; border-radius:var(--r)}
 .skip:focus{top:1rem}
 .wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--gut)}
-.mono{font-family:var(--fm); font-size:.8125rem; letter-spacing:.01em}
+.mono{font-size:.875rem; font-variant-numeric:tabular-nums}
 .num{font-variant-numeric:tabular-nums}
 h1,h2,h3{font-weight:560; letter-spacing:-.035em; line-height:1.02; text-wrap:balance}
 h2{font-size:clamp(2.1rem, 3.1vw + .9rem, 3rem)}
@@ -156,22 +149,23 @@ h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 .stage canvas{position:absolute; inset:0; width:100%; height:100%; opacity:0; transition:opacity .8s var(--ease); touch-action:pan-y; cursor:grab}
 .stage canvas:active{cursor:grabbing}
 .stage.live canvas{opacity:1}
-.stage .poster{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; padding:var(--nav-h) 2rem 4rem}
+.stage .poster{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; transition:opacity .6s var(--ease)}
+.stage.live .poster{opacity:0}
 .hotspots{position:absolute; inset:0; pointer-events:none}
 .hs{position:absolute; left:0; top:0; will-change:transform}
 .hs-dot{position:absolute; left:-.375rem; top:-.375rem; width:.75rem; height:.75rem; border-radius:50%; background:var(--accent); box-shadow:0 0 0 .3rem rgba(43,68,230,.18); transform:scale(.4); opacity:0; transition:transform .35s var(--snap), opacity .2s}
-.hs-label{position:absolute; left:.9rem; bottom:.6rem; white-space:nowrap; font-family:var(--fm); font-size:.75rem; background:var(--paper); color:var(--ink); padding:.35rem .55rem; border-radius:.25rem; box-shadow:0 .5rem 1.5rem -.5rem rgba(20,21,24,.25); opacity:0; transform:translateY(.35rem); transition:opacity .25s var(--snap), transform .35s var(--snap)}
+.hs-label{position:absolute; left:.9rem; bottom:.6rem; white-space:nowrap; font-size:.8rem; font-weight:500; background:var(--paper); color:var(--ink); padding:.35rem .55rem; border-radius:.25rem; box-shadow:0 .5rem 1.5rem -.5rem rgba(20,21,24,.25); opacity:0; transform:translateY(.35rem); transition:opacity .25s var(--snap), transform .35s var(--snap)}
 .hs.flip .hs-label{left:auto; right:.9rem}
 .hs.on .hs-dot{transform:none; opacity:1}
 .hs.on .hs-label{opacity:1; transform:none; transition-delay:.08s}
 .stage-nav{position:absolute; left:2rem; right:2rem; bottom:1.75rem; display:flex; gap:.35rem; flex-wrap:wrap}
-.stage-nav button{border:1px solid var(--line-2); background:rgba(248,248,245,.7); border-radius:var(--r); padding:.4rem .7rem; font-family:var(--fm); font-size:.75rem; cursor:pointer; color:var(--ink-2); transition:background-color .25s var(--snap), color .25s var(--snap), border-color .25s var(--snap), transform .16s var(--snap)}
+.stage-nav button{border:1px solid var(--line-2); background:rgba(248,248,245,.7); border-radius:var(--r); padding:.4rem .75rem; font-size:.8rem; font-weight:500; cursor:pointer; color:var(--ink-2); transition:background-color .25s var(--snap), color .25s var(--snap), border-color .25s var(--snap), transform .16s var(--snap)}
 .stage-nav button:active{transform:scale(.96)}
 .stage-nav button[aria-current="step"]{background:var(--ink); border-color:var(--ink); color:#fff}
 @media (hover:hover){.stage-nav button:hover{border-color:var(--ink)}}
 .stage-nav{opacity:0; transform:translateY(.5rem); transition:opacity .4s var(--snap), transform .4s var(--snap)}
 .lab.in-process .stage-nav{opacity:1; transform:none}
-.drag-hint{position:absolute; right:2rem; top:calc(var(--nav-h) + 1.25rem); font-family:var(--fm); font-size:.75rem; color:var(--mut); display:flex; align-items:center; gap:.5rem; transition:opacity .4s var(--snap)}
+.drag-hint{position:absolute; right:2rem; top:calc(var(--nav-h) + 1.25rem); font-size:.8rem; color:var(--mut); display:flex; align-items:center; gap:.5rem; transition:opacity .4s var(--snap)}
 .drag-hint i{display:block; width:1.75rem; height:1px; background:currentColor; position:relative}
 .drag-hint i::before,.drag-hint i::after{content:""; position:absolute; top:-.2rem; width:.4rem; height:.4rem; border-top:1px solid currentColor}
 .drag-hint i::before{left:0; border-left:1px solid currentColor; transform:rotate(-45deg); transform-origin:0 0; top:0}
@@ -190,9 +184,9 @@ h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 .step h3{font-size:clamp(1.9rem, 1.8vw + 1rem, 2.6rem); letter-spacing:-.035em}
 .step p{margin-top:1.1rem; color:var(--ink-2)}
 .step dl{display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-top:2rem; padding-top:1.25rem; border-top:1px solid var(--line)}
-.step dt{font-family:var(--fm); font-size:.75rem; color:var(--mut)}
+.step dt{font-size:.85rem; color:var(--mut)}
 .step dd{font-weight:500; margin-top:.2rem}
-.step .phase{font-family:var(--fm); font-size:.8125rem; color:var(--accent); margin-bottom:1rem}
+.step .phase{font-size:.85rem; color:var(--accent); margin-bottom:1rem}
 .step{opacity:.28; transition:opacity .5s var(--snap)}
 .step.active{opacity:1}
 
@@ -218,7 +212,7 @@ h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 .svc-card:not(.big) figure{aspect-ratio:16/8.2}
 .svc-body{padding:1.75rem 1.75rem 2rem; display:grid; grid-template-columns:1fr auto; gap:.5rem 2rem; align-items:end}
 .svc-body p{color:var(--mut); grid-column:1; max-width:36ch}
-.svc-body .price{grid-column:2; grid-row:1 / span 2; font-family:var(--fm); font-size:.875rem; white-space:nowrap; text-align:right}
+.svc-body .price{grid-column:2; grid-row:1 / span 2; font-size:.875rem; color:var(--mut); white-space:nowrap; text-align:right}
 .svc-body .price b{display:block; font-family:var(--f); font-size:1.5rem; font-weight:560; letter-spacing:-.03em}
 @media (hover:hover){.svc-card:hover img{transform:scale(1.035)}}
 @media (max-width:899px){.svc{grid-template-columns:1fr} .svc-card.big{grid-row:auto} .svc-body{grid-template-columns:1fr} .svc-body .price{grid-column:1; grid-row:auto; text-align:left}}
@@ -254,7 +248,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .check input:checked::after{opacity:1; transform:rotate(-45deg) scale(1)}
 .check small{display:block; color:var(--mut); font-size:.875rem}
 .calc-out{position:sticky; top:calc(var(--nav-h) + 1.5rem); padding:2.5rem; background:var(--ink); color:#f3f3f0; border-radius:var(--r); display:grid; gap:2rem}
-.calc-out .k{font-family:var(--fm); font-size:.75rem; color:#a9abb2}
+.calc-out .k{font-size:.85rem; color:#a9abb2}
 .calc-total{font-size:clamp(2.6rem, 3vw + 1rem, 3.75rem); font-weight:560; letter-spacing:-.045em; line-height:1}
 .calc-total + .mono{margin-top:.6rem; color:#c8c9ce}
 .calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; padding-top:1.5rem; border-top:1px solid #34363c}
@@ -265,7 +259,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 
 .gal-head{display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; margin-bottom:3rem}
 .gal-ctrl{display:flex; gap:.5rem}
-.gal-ctrl button{width:3.25rem; height:3.25rem; border-radius:var(--r); border:1px solid var(--line-2); background:transparent; cursor:pointer; font-family:var(--fm); font-size:1.1rem; transition:border-color .2s var(--snap), transform .16s var(--snap), opacity .2s}
+.gal-ctrl button{width:3.25rem; height:3.25rem; border-radius:var(--r); border:1px solid var(--line-2); background:transparent; cursor:pointer; font-size:1.1rem; transition:border-color .2s var(--snap), transform .16s var(--snap), opacity .2s}
 .gal-ctrl button:active{transform:scale(.95)}
 .gal-ctrl button:disabled{opacity:.35; cursor:default}
 @media (hover:hover){.gal-ctrl button:not(:disabled):hover{border-color:var(--ink)}}
@@ -276,7 +270,8 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .proj img{width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease)}
 @media (hover:hover){.proj:hover img{transform:scale(1.035)}}
 .proj h3{margin-top:1.25rem}
-.proj .meta{display:flex; gap:1.25rem; margin-top:.6rem; color:var(--mut)}
+.proj .meta{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.75rem}
+.proj .meta span{font-size:.85rem; font-weight:500; color:var(--ink-2); padding:.3rem .65rem; border-radius:var(--r); background:var(--paper); border:1px solid var(--line); font-variant-numeric:tabular-nums}
 .proj p{margin-top:.6rem; color:var(--ink-2); font-size:1rem; max-width:34ch}
 @media (max-width:899px){.gal{grid-auto-columns:82%} .gal-ctrl{display:none}}
 
@@ -288,9 +283,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .doc-head{display:flex; justify-content:space-between; gap:1rem; padding-bottom:1.5rem; border-bottom:1px solid var(--line); color:var(--mut)}
 .clause{display:grid; grid-template-columns:3.25rem minmax(0,1fr) 11rem; gap:1.5rem; padding:1.6rem 0; border-bottom:1px solid var(--line)}
 .clause:last-child{border-bottom:0; padding-bottom:0}
-.clause .n{font-family:var(--fm); font-size:.8125rem; color:var(--mut); padding-top:.2rem}
+.clause .n{font-size:.9rem; font-weight:500; color:var(--mut); padding-top:.1rem; font-variant-numeric:tabular-nums}
 .clause p{font-size:1rem; line-height:1.6; color:var(--ink-2)}
-.clause .note{font-family:var(--fm); font-size:.75rem; color:var(--accent); padding-top:.2rem}
+.clause .note{font-size:.85rem; font-weight:500; color:var(--accent); padding-top:.15rem}
 .hl{background-color:transparent; border-radius:.15rem; box-decoration-break:clone; -webkit-box-decoration-break:clone; padding:0 .15rem; margin:0 -.15rem; transition:background-color .7s var(--ease)}
 .clause.in .hl{background-color:var(--accent-soft); color:var(--ink)}
 @media (max-width:899px){.contract{grid-template-columns:1fr; gap:2.5rem} .contract-intro{position:relative; top:auto} .doc{padding:1.5rem} .clause{grid-template-columns:2.25rem 1fr; gap:.75rem 1rem} .clause .note{grid-column:2}}
@@ -305,7 +300,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .rev-card{padding:2rem; background:var(--paper); border-radius:var(--r); display:flex; flex-direction:column; justify-content:space-between; gap:1.5rem}
 .rev-card blockquote{font-size:1.125rem; line-height:1.45; letter-spacing:-.01em}
 cite{font-style:normal; display:block; font-size:.9rem}
-cite span{display:block; color:var(--mut); font-family:var(--fm); font-size:.75rem; margin-top:.2rem}
+cite span{display:block; color:var(--mut); font-size:.85rem; margin-top:.15rem}
 .rev-main cite span{color:#dfe3ff}
 @media (max-width:899px){.rev{grid-template-columns:1fr} .rev-main{padding:1.75rem; min-height:0}}
 
@@ -328,7 +323,7 @@ cite span{display:block; color:var(--mut); font-family:var(--fm); font-size:.75r
 .zamer-intro p{margin-top:1.25rem; color:var(--mut); max-width:36ch}
 .next{margin-top:2.5rem; display:grid; gap:1.25rem; counter-reset:n}
 .next li{display:grid; grid-template-columns:2.5rem 1fr; gap:1rem; align-items:baseline; counter-increment:n; max-width:30rem}
-.next li::before{content:counter(n); font-family:var(--fm); font-size:.8125rem; width:2rem; height:2rem; border:1px solid var(--line-2); border-radius:50%; display:grid; place-items:center}
+.next li::before{content:counter(n); font-size:.85rem; font-weight:500; width:2rem; height:2rem; border:1px solid var(--line-2); border-radius:50%; display:grid; place-items:center}
 .form{background:var(--paper); border-radius:var(--r); padding:2.5rem; display:grid; gap:1.4rem}
 .f label{display:block; font-weight:500; font-size:.95rem; margin-bottom:.5rem}
 .f label span{color:var(--mut); font-weight:400}
@@ -351,7 +346,7 @@ cite span{display:block; color:var(--mut); font-family:var(--fm); font-size:.75r
 .foot{padding:6rem 0 2.5rem; border-top:1px solid var(--line)}
 .foot-word{font-size:clamp(5rem, 17vw, 17rem); font-weight:600; letter-spacing:-.07em; line-height:.8; margin-left:-.05em}
 .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:2rem; margin-top:4rem}
-.foot-grid h3{font-size:.8125rem; font-family:var(--fm); font-weight:400; letter-spacing:0; color:var(--mut); margin-bottom:1rem}
+.foot-grid h3{font-size:.85rem; font-weight:500; letter-spacing:0; color:var(--mut); margin-bottom:1rem}
 .foot-grid li+li{margin-top:.5rem}
 .foot-grid a{transition:color .2s}
 @media (hover:hover){.foot-grid a:hover{color:var(--accent)}}
@@ -360,18 +355,19 @@ cite span{display:block; color:var(--mut); font-family:var(--fm); font-size:.75r
 @media (max-width:899px){.foot-grid{grid-template-columns:minmax(0,1fr)} .disclaimer{flex-direction:column}}
 
 .ln{display:block; overflow:hidden; padding-bottom:.08em; margin-bottom:-.08em}
-.ln > span{display:block; transform:translateY(105%); transition:transform 1s var(--ease)}
-.w{display:inline-block; opacity:0; transform:translateY(.6em); transition:opacity .6s var(--ease), transform .7s var(--ease)}
-.rv{opacity:0; transform:translateY(1.5rem); transition:opacity .8s var(--ease), transform 1s var(--ease)}
+.ln > span{display:block; transform:translateY(105%); transition:transform .7s var(--ease)}
+.hero-in{animation:heroIn .65s var(--ease) both}
+@keyframes heroIn{from{transform:translateY(.9rem)}to{transform:none}}
+.rv{opacity:0; transform:translateY(.9rem); transition:opacity .45s var(--ease), transform .55s var(--ease)}
 .is-in .ln > span, .is-in.ln > span{transform:none}
-.is-in .w{opacity:1; transform:none}
 .rv.is-in{opacity:1; transform:none}
-html:not(.js) .ln > span, html:not(.js) .w, html:not(.js) .rv{transform:none; opacity:1}
+html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition-duration:.01ms !important; animation-duration:.01ms !important}
-  .ln > span,.w,.rv{transform:none !important; opacity:1 !important}
+  .ln > span,.rv{transform:none !important; opacity:1 !important}
+  .hero-in{animation:none}
 }
 </style>
 <script>document.documentElement.classList.add('js')</script>
@@ -411,9 +407,9 @@ html:not(.js) .ln > span, html:not(.js) .w, html:not(.js) .rv{transform:none; op
   <div class="lab" id="lab">
     <div class="lab-copy">
       <section class="hero" id="top" aria-labelledby="h1">
-        <h1 id="h1" data-split>Ремонт квартир без роста сметы</h1>
-        <p class="lead" data-words>Работаем в Москве и ближнем Подмосковье. Цену фиксируем в договоре, оплата по этапам после приёмки.</p>
-        <div class="hero-cta rv" data-delay="5">
+        <h1 id="h1" class="hero-in">Ремонт квартир без роста сметы</h1>
+        <p class="lead hero-in" style="animation-delay:.06s">Работаем в Москве и ближнем Подмосковье. Цену фиксируем в договоре, оплата по этапам после приёмки.</p>
+        <div class="hero-cta hero-in" style="animation-delay:.12s">
           <a class="btn btn-primary" href="#price">Рассчитать смету <span class="arr" aria-hidden="true">→</span></a>
           <a class="btn btn-ghost" href="#process">Как идёт ремонт</a>
         </div>
@@ -465,7 +461,7 @@ html:not(.js) .ln > span, html:not(.js) .w, html:not(.js) .rv{transform:none; op
     <div class="lab-stage">
       <div class="stage" id="stage">
         <canvas id="model" role="img" aria-label="Интерактивная 3D-модель квартиры: кухня-гостиная, спальня, санузел и прихожая. Модель меняется по этапам ремонта, её можно повернуть."></canvas>
-        <noscript><img class="poster" src="assets/img/model-final.webp" alt="3D-модель квартиры после ремонта: кухня-гостиная, спальня, санузел и прихожая" width="784" height="900"></noscript>
+        <img class="poster" src="assets/img/model-final.webp" alt="3D-модель квартиры после ремонта: кухня-гостиная, спальня, санузел и прихожая" width="784" height="900" fetchpriority="high" decoding="async">
         <div class="hotspots" id="hotspots"></div>
         <p class="drag-hint" aria-hidden="true"><i></i>Потяните, чтобы повернуть</p>
         <nav class="stage-nav" id="stageNav" aria-label="Этапы ремонта">
@@ -571,25 +567,25 @@ html:not(.js) .ln > span, html:not(.js) .w, html:not(.js) .rv{transform:none; op
       <article class="proj">
         <figure><img src="assets/img/proj-1.webp" width="900" height="1125" loading="lazy" decoding="async" alt="Кухня-гостиная в квартире в Хамовниках: светлое дерево и белые фасады"></figure>
         <h3>Двушка в Хамовниках</h3>
-        <div class="meta mono num"><span>68 м²</span><span>4 месяца</span><span>Комфорт</span></div>
+        <div class="meta"><span>68 м²</span><span>4 месяца</span><span>Комфорт</span></div>
         <p>Объединили кухню с комнатой и перенесли санузел, перепланировку согласовали до старта.</p>
       </article>
       <article class="proj">
         <figure><img src="assets/img/proj-2.webp" width="900" height="1125" loading="lazy" decoding="async" alt="Компактная студия на Ходынке со спальной зоной у окна"></figure>
         <h3>Студия на Ходынке</h3>
-        <div class="meta mono num"><span>41 м²</span><span>10 недель</span><span>Базовый</span></div>
+        <div class="meta"><span>41 м²</span><span>10 недель</span><span>Базовый</span></div>
         <p>Ремонт под сдачу: износостойкие материалы и мебель, которую легко обслуживать.</p>
       </article>
       <article class="proj">
         <figure><img src="assets/img/proj-3.webp" width="900" height="1125" loading="lazy" decoding="async" alt="Гостиная в квартире на Соколе с диваном и большим окном"></figure>
         <h3>Трёшка на Соколе</h3>
-        <div class="meta mono num"><span>96 м²</span><span>5 месяцев</span><span>Премиум</span></div>
+        <div class="meta"><span>96 м²</span><span>5 месяцев</span><span>Премиум</span></div>
         <p>Сценарии света, столярка по чертежам дизайнера и тёплый пол во всей квартире.</p>
       </article>
       <article class="proj">
         <figure><img src="assets/img/proj-4.webp" width="900" height="1125" loading="lazy" decoding="async" alt="Частный дом в Истринском районе с панорамными окнами"></figure>
         <h3>Дом в Истринском районе</h3>
-        <div class="meta mono num"><span>180 м²</span><span>9 месяцев</span><span>Газобетон</span></div>
+        <div class="meta"><span>180 м²</span><span>9 месяцев</span><span>Газобетон</span></div>
         <p>Фундамент, коробка, кровля и инженерия. Заселились к новому году, как планировали.</p>
       </article>
     </div>
@@ -732,27 +728,21 @@ function splitLines(el) {
   el.setAttribute('aria-label', words.join(' '));
   el.innerHTML = lines.map((l, i) => `<span class="ln" aria-hidden="true"><span style="transition-delay:${i * 80}ms">${l.join(' ')}</span></span>`).join('');
 }
-function splitWords(el) {
-  const words = el.textContent.trim().split(/[ \t\n\r]+/);
-  el.innerHTML = words.map((w, i) => `<span class="w" style="transition-delay:${200 + i * 28}ms">${w}</span>`).join(' ');
-}
-
-const ready = Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1200))]);
+const ready = Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 500))]);
 ready.then(() => {
   if (!reduce) {
     $$('[data-split]').forEach(splitLines);
-    $$('[data-words]').forEach(splitWords);
   }
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     const el = e.target;
     const d = +(el.dataset.delay || 0);
     const sibs = el.parentElement ? [...el.parentElement.children].filter(c => c.classList.contains('rv')) : [];
-    el.style.transitionDelay = (d * 80 + Math.max(0, sibs.indexOf(el)) * 90) + 'ms';
+    el.style.transitionDelay = (d * 60 + Math.max(0, sibs.indexOf(el)) * 60) + 'ms';
     el.classList.add('is-in');
     io.unobserve(el);
-  }), { threshold: .14, rootMargin: '0px 0px -6% 0px' });
-  $$('[data-split],[data-words],.rv,.clause').forEach(el => io.observe(el));
+  }), { threshold: .08, rootMargin: '0px 0px 4% 0px' });
+  $$('[data-split],.rv,.clause').forEach(el => io.observe(el));
   const clauseIo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); clauseIo.unobserve(e.target); } }), { threshold: .9 });
   $$('.clause').forEach(c => clauseIo.observe(c));
 });
@@ -784,24 +774,20 @@ const HOTSPOTS = [
   { stage: 4, x: 1.2, y: 0.05, z: 1.2, label: 'Стяжка с контролем уровня' },
   { stage: 5, x: 1.8, y: 0.07, z: -1.6, label: 'Плитка в санузле' },
   { stage: 5, x: -1.6, y: 0.07, z: 2.2, label: 'Инженерная доска' },
-  { stage: 6, x: 1.9, y: 0.9, z: 2.4, label: 'Сдаём после клининга' },
+  { stage: 6, x: 0.6, y: 0.95, z: 2.7, label: 'Сдаём после клининга' },
 ];
 
 function webgl() {
   try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; }
 }
 function fallback() {
-  stageEl.querySelector('canvas').remove();
-  const img = new Image();
-  img.className = 'poster';
-  img.src = 'assets/img/model-final.webp';
-  img.alt = '3D-модель квартиры после ремонта: кухня-гостиная, спальня, санузел и прихожая';
-  img.width = 784; img.height = 900;
-  stageEl.prepend(img);
+  const cv = stageEl.querySelector('canvas');
+  if (cv) cv.remove();
+  stageEl.classList.remove('live');
   stageEl.classList.add('touched');
 }
 const css = getComputedStyle(document.documentElement);
-if (webgl()) {
+function loadScene() {
   import('./assets/scene.js').then(({ createScene }) => {
     scene = createScene({
       canvas: $('#model'), hotspotLayer: $('#hotspots'), hotspots: HOTSPOTS,
@@ -810,9 +796,15 @@ if (webgl()) {
       onFirstFrame: () => stageEl.classList.add('live'),
     });
     if (location.search.includes('debug')) window.__scene = scene;
-    if (heroOn) scene.intro(); else apply();
+    apply();
   }).catch(fallback);
+}
+if (webgl()) {
   stageEl.addEventListener('model-lost', fallback);
+  // Постер готовой квартиры весит 11 КБ и виден сразу. Сцена (147 КБ) догружается после
+  // загрузки страницы, когда браузер свободен, и подменяет постер плавно.
+  const later = () => ('requestIdleCallback' in window ? requestIdleCallback(loadScene, { timeout: 1500 }) : setTimeout(loadScene, 200));
+  if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
 } else fallback();
 
 const PRICE = { base: 12900, comfort: 18900, premium: 27500 };

@@ -3,7 +3,7 @@ import {
   CylinderGeometry, SphereGeometry, MeshStandardMaterial, ShadowMaterial, HemisphereLight,
   DirectionalLight, Vector3, Plane, CurvePath, LineCurve3, TubeGeometry, InstancedMesh,
   Object3D, Color, CanvasTexture, RepeatWrapping, SRGBColorSpace, PCFShadowMap,
-  NeutralToneMapping, DoubleSide, PMREMGenerator
+  NeutralToneMapping, DoubleSide, PMREMGenerator, Box3
 } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -378,9 +378,9 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
     a.castShadow = b.castShadow = true;
   };
 
-  piece(-2.75, zA + PL + 0.3, [
-    rbox(2.3, 0.84, 0.6, 0.015, M.lac, 0, 0, 0),
-    rbox(2.34, 0.04, 0.62, 0.01, M.stone, 0, 0.84, 0.01),
+  piece(-2.72, zA + PL + 0.3, [
+    rbox(2.2, 0.84, 0.6, 0.015, M.lac, 0, 0, 0),
+    rbox(2.22, 0.04, 0.62, 0.01, M.stone, 0, 0.84, 0.01),
     box(0.44, 0.012, 0.34, M.steel, 0.15, 0.881, 0.02),
     box(0.5, 0.008, 0.42, M.metal, -0.75, 0.881, 0.02),
   ]);
@@ -392,21 +392,21 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   ]);
   chair(-3.95, 1.15, Math.PI / 2); chair(-3.95, 1.95, Math.PI / 2);
   chair(-2.65, 1.15, -Math.PI / 2); chair(-2.65, 1.95, -Math.PI / 2);
-  piece(1.1, 2.35, [rbox(2.7, 0.012, 2.0, 0.004, M.rug, 0, 0, 0)]);
-  piece(1.9, 2.45, [
+  piece(0.6, 2.15, [rbox(2.6, 0.012, 1.7, 0.004, M.rug, 0, 0, 0)]);
+  piece(0.6, Z1 - PL - 0.47, [
     rbox(0.9, 0.4, 2.2, 0.07, M.fabric, 0, 0, 0),
     rbox(0.24, 0.42, 2.2, 0.09, M.fabric, 0.33, 0.38, 0),
     rbox(0.9, 0.22, 0.2, 0.08, M.fabric, 0, 0.38, -1.0),
     rbox(0.9, 0.22, 0.2, 0.08, M.fabric, 0, 0.38, 1.0),
     rbox(0.62, 0.12, 0.88, 0.05, M.fabricLight, -0.1, 0.4, -0.45),
     rbox(0.62, 0.12, 0.88, 0.05, M.fabricLight, -0.1, 0.4, 0.45),
-  ]);
-  piece(0.75, 2.45, [cyl(0.42, 0.04, M.stone, 0, 0.36, 0, 32), cyl(0.06, 0.36, M.metal, 0, 0, 0, 12)]);
-  piece(2.12, 1.86, [cyl(0.12, 0.03, M.metal, 0, 0, 0, 16), cyl(0.012, 1.45, M.metal, 0, 0.03, 0, 8), new Mesh(new CylinderGeometry(0.13, 0.19, 0.24, 20, 1, true), M.shade)]);
+  ], -Math.PI / 2);
+  piece(0.6, 1.72, [cyl(0.42, 0.04, M.stone, 0, 0.36, 0, 32), cyl(0.06, 0.36, M.metal, 0, 0, 0, 12)]);
+  piece(1.98, 2.92, [cyl(0.12, 0.03, M.metal, 0, 0, 0, 16), cyl(0.012, 1.45, M.metal, 0, 0.03, 0, 8), new Mesh(new CylinderGeometry(0.13, 0.19, 0.24, 20, 1, true), M.shade)]);
   furniture[furniture.length - 1].children[2].position.y = 1.55;
-  placeLeaves(plantP(-4.15, 2.9, 1.1));
+  placeLeaves(plantP(-4.08, 2.78, 1.1));
 
-  piece(-2.2, Z0 + PL + 1.05, [
+  piece(-2.2, Z0 + PL + 1.09, [
     rbox(1.7, 0.3, 2.1, 0.04, M.darkWood, 0, 0, 0),
     rbox(1.62, 0.2, 2.0, 0.06, M.linen, 0, 0.3, 0),
     rbox(1.66, 0.08, 1.35, 0.04, M.fabricLight, 0, 0.47, 0.34),
@@ -429,7 +429,7 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   piece(X1 - PL - 0.22, -2.3, [rbox(0.42, CUT, 1.3, 0.015, M.lac, 0, 0, 0)]);
 
   piece(X1 - PL - 0.18, 0.2, [rbox(0.36, 0.44, 1.2, 0.02, M.oak, 0, 0, 0)]);
-  piece(xE + PL + 0.31, 2.6, [rbox(0.6, CUT, 1.1, 0.015, M.lac, 0, 0, 0)]);
+  piece(2.4 + TP / 2 + PL + 0.31, 2.6, [rbox(0.6, CUT, 1.1, 0.015, M.lac, 0, 0, 0)]);
   piece(3.95, 2.05, [rbox(0.9, 0.012, 0.6, 0.004, M.fabricDark, 0, 0, 0)]);
   placeLeaves(plantP(4.15, -0.55, 0.85));
 
@@ -657,16 +657,27 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   resize();
   return {
     setStage,
+    audit() {
+      const keep = model.rotation.clone();
+      model.rotation.set(0, 0, 0);
+      model.updateMatrixWorld(true);
+      const out = [];
+      furniture.forEach((g, i) => {
+        if (!g.visible) return;
+        const b = new Box3().setFromObject(g);
+        if (b.min.x < X0 + PL - 0.005 || b.max.x > X1 - PL + 0.005 || b.min.z < Z0 + PL - 0.005 || b.max.z > Z1 - PL + 0.005) {
+          out.push({ i, x: [b.min.x, b.max.x].map(v => +v.toFixed(2)), z: [b.min.z, b.max.z].map(v => +v.toFixed(2)) });
+        }
+      });
+      model.rotation.copy(keep);
+      model.updateMatrixWorld(true);
+      return out;
+    },
     bench(n = 30) {
       const gl = renderer.getContext(), px = new Uint8Array(4);
       const t0 = performance.now();
       for (let i = 0; i < n; i++) { renderer.render(scene, camera); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); }
       return { msPerFrame: (performance.now() - t0) / n, calls: renderer.info.render.calls, tris: renderer.info.render.triangles, dpr: renderer.getPixelRatio() };
-    },
-    intro() {
-      if (reduceMotion) return setStage(6, { hero: true, instant: true });
-      setStage(1, { hero: true, instant: true });
-      requestAnimationFrame(() => setStage(6, { hero: true }));
     },
   };
 }
