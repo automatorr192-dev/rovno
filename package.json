@@ -1,0 +1,12 @@
+{
+  "name": "rovno",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/scene.js --bundle --format=esm --minify --target=es2020 --outfile=assets/scene.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "three": "^0.186.1"
+  }
+}

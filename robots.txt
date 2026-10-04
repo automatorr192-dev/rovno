@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://automatorr192-dev.github.io/rovno/sitemap.xml
