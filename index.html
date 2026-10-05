@@ -80,7 +80,7 @@
   --ease:cubic-bezier(.22,1,.36,1); --snap:cubic-bezier(.2,.8,.2,1);
   --f:"Geologica",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --fm:var(--f);
-  --nav-h:4.25rem; --gut:2.5rem; --maxw:88rem;
+  --nav-h:4.25rem; --gut:2.5rem; --maxw:90rem;
 }
 html{font-size:16px; -webkit-text-size-adjust:100%; scroll-padding-top:calc(var(--nav-h) + 1rem)}
 @media (min-width:1024px){html{font-size:clamp(13.5px, calc(100vw / 1440 * 16), 22px)}}
@@ -156,6 +156,7 @@ h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 .hs-dot{position:absolute; left:-.375rem; top:-.375rem; width:.75rem; height:.75rem; border-radius:50%; background:var(--accent); box-shadow:0 0 0 .3rem rgba(43,68,230,.18); transform:scale(.4); opacity:0; transition:transform .35s var(--snap), opacity .2s}
 .hs-label{position:absolute; left:.9rem; bottom:.6rem; white-space:nowrap; font-size:.8rem; font-weight:500; background:var(--paper); color:var(--ink); padding:.35rem .55rem; border-radius:.25rem; box-shadow:0 .5rem 1.5rem -.5rem rgba(20,21,24,.25); opacity:0; transform:translateY(.35rem); transition:opacity .25s var(--snap), transform .35s var(--snap)}
 .hs.flip .hs-label{left:auto; right:.9rem}
+.hs.below .hs-label{bottom:auto; top:.6rem}
 .hs.on .hs-dot{transform:none; opacity:1}
 .hs.on .hs-label{opacity:1; transform:none; transition-delay:.08s}
 .stage-nav{position:absolute; left:2rem; right:2rem; bottom:1.75rem; display:flex; gap:.35rem; flex-wrap:wrap}
@@ -192,11 +193,14 @@ h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 
 @media (max-width:899px){
   .lab{grid-template-columns:1fr}
-  .lab-stage{order:-1; position:sticky; top:0; z-index:5; height:50svh}
-  .stage{position:relative; height:50svh}
+  .lab-stage{order:-1; position:sticky; top:0; z-index:5; height:46svh}
+  .lab-stage::after{content:""; position:absolute; left:0; right:0; top:100%; height:2.5rem; background:linear-gradient(var(--bg-2), rgba(233,233,229,0)); pointer-events:none}
+  .stage{position:relative; height:46svh}
   .lab-copy{padding:0 var(--gut)}
   .hero{min-height:auto; padding:2rem 0 3rem}
-  .stage-nav{display:none}
+  .stage-nav{left:0; right:0; bottom:.75rem; flex-wrap:nowrap; overflow-x:auto; padding:0 var(--gut); scrollbar-width:none}
+  .stage-nav::-webkit-scrollbar{display:none}
+  .stage-nav button{flex:none; padding:.45rem .8rem}
   .drag-hint{top:calc(var(--nav-h) + .5rem); right:1rem}
   .step{min-height:56svh; opacity:.35}
   .step:last-child{min-height:60svh}
@@ -215,7 +219,7 @@ h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 .svc-body .price{grid-column:2; grid-row:1 / span 2; font-size:.875rem; color:var(--mut); white-space:nowrap; text-align:right}
 .svc-body .price b{display:block; font-family:var(--f); font-size:1.5rem; font-weight:560; letter-spacing:-.03em}
 @media (hover:hover){.svc-card:hover img{transform:scale(1.035)}}
-@media (max-width:899px){.svc{grid-template-columns:1fr} .svc-card.big{grid-row:auto} .svc-body{grid-template-columns:1fr} .svc-body .price{grid-column:1; grid-row:auto; text-align:left}}
+@media (max-width:899px){.svc{grid-template-columns:1fr} .svc-card.big{grid-row:auto} .svc-body{grid-template-columns:1fr} .svc-body .price{grid-column:1; grid-row:auto; text-align:left} .svc-body p{max-width:none}}
 
 .calc{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:1.25rem; align-items:start}
 .calc-form{display:grid; gap:2.5rem; padding:2.5rem; background:var(--paper); border-radius:var(--r)}
@@ -251,11 +255,17 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .calc-out .k{font-size:.85rem; color:#a9abb2}
 .calc-total{font-size:clamp(2.6rem, 3vw + 1rem, 3.75rem); font-weight:560; letter-spacing:-.045em; line-height:1}
 .calc-total + .mono{margin-top:.6rem; color:#c8c9ce}
-.calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; padding-top:1.5rem; border-top:1px solid #34363c}
+.calc-grid{display:grid; grid-template-columns:1fr 1fr; align-items:end; gap:1.5rem; padding-top:1.5rem; border-top:1px solid #34363c}
 .calc-grid b{display:block; font-size:1.25rem; font-weight:500; letter-spacing:-.02em; margin-top:.25rem}
 .calc-note{font-size:.875rem; color:#a9abb2}
 .calc-out .btn-primary{width:100%}
-@media (max-width:899px){.calc{grid-template-columns:1fr} .calc-form,.calc-out{padding:1.5rem} .calc-out{position:relative; top:auto} .seg.three{grid-template-columns:1fr}}
+.calc-bar{display:none}
+@media (max-width:899px){.calc{grid-template-columns:1fr} .calc-form,.calc-out{padding:1.5rem} .calc-out{position:relative; top:auto} .seg.three{grid-template-columns:1fr}
+  .calc-bar{display:flex; justify-content:space-between; align-items:baseline; gap:1rem; position:sticky; bottom:.75rem; z-index:4; padding:.9rem 1.25rem; border-radius:var(--r); background:var(--ink); color:#f3f3f0; box-shadow:0 1rem 2rem -1rem rgba(20,21,24,.45)}
+  .calc-bar{transition:opacity .25s var(--snap), transform .25s var(--snap)}
+  .calc-bar.off{opacity:0; transform:translateY(.5rem); pointer-events:none}
+  .calc-bar span{font-size:.85rem; color:#a9abb2}
+  .calc-bar b{font-size:1.35rem; font-weight:560; letter-spacing:-.03em}}
 
 .gal-head{display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; margin-bottom:3rem}
 .gal-ctrl{display:flex; gap:.5rem}
@@ -492,7 +502,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
           </div>
         </article>
         <article class="svc-card rv">
-          <figure><img src="assets/img/svc-house.webp" srcset="assets/img/svc-house-800.webp 800w, assets/img/svc-house.webp 1400w" sizes="(max-width: 899px) 100vw, 45vw" width="1400" height="718" loading="lazy" decoding="async" alt="Современный двухэтажный частный дом с большими окнами"></figure>
+          <figure><img src="assets/img/svc-house.webp" srcset="assets/img/svc-house-800.webp 800w, assets/img/svc-house.webp 1400w" sizes="(max-width: 899px) 100vw, 45vw" width="1400" height="718" loading="lazy" decoding="async" alt="Стройка частного дома: стены из блоков и леса вокруг"></figure>
           <div class="svc-body">
             <h3>Строительство домов</h3>
             <p>Газобетон и каркас, от фундамента до чистовой отделки.</p>
@@ -500,7 +510,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
           </div>
         </article>
         <article class="svc-card rv">
-          <figure><img src="assets/img/svc-design.webp" srcset="assets/img/svc-design-800.webp 800w, assets/img/svc-design.webp 1400w" sizes="(max-width: 899px) 100vw, 45vw" width="1400" height="718" loading="lazy" decoding="async" alt="Дизайнер раскладывает образцы отделки на чертеже квартиры"></figure>
+          <figure><img src="assets/img/svc-design.webp" srcset="assets/img/svc-design-800.webp 800w, assets/img/svc-design.webp 1400w" sizes="(max-width: 899px) 100vw, 45vw" width="1400" height="718" loading="lazy" decoding="async" alt="Образцы отделки на чертеже квартиры"></figure>
           <div class="svc-body">
             <h3>Дизайн-проект</h3>
             <p>Планировка, визуализации и чертежи, по которым бригада не ошибается.</p>
@@ -541,6 +551,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
           </fieldset>
           <label class="check"><input type="checkbox" id="design"><span>Нужен дизайн-проект<small>Планировка, визуализации, рабочие чертежи</small></span></label>
         </form>
+        <div class="calc-bar" aria-hidden="true"><span>Работы под ключ</span><b class="num" id="totalBar">1 209 600 ₽</b></div>
         <div class="calc-out rv" aria-live="polite">
           <div>
             <div class="k">Работы под ключ</div>
@@ -549,7 +560,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
           </div>
           <div class="calc-grid">
             <div><span class="k">Срок</span><b class="num" id="term">4 месяца</b></div>
-            <div><span class="k">Материалы, ориентир</span><b class="num" id="mat">0,8-1,1 млн ₽</b></div>
+            <div><span class="k">Материалы, ориентир</span><b class="num" id="mat">0,8–1,1 млн ₽</b></div>
           </div>
           <p class="calc-note">Расчёт предварительный. Цену в договоре фиксируем после замера и больше не меняем.</p>
           <a class="btn btn-primary" href="#zamer" id="calcCta">Записаться на замер <span class="arr" aria-hidden="true">→</span></a>
@@ -583,7 +594,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
         <p>Сценарии света, столярка по чертежам дизайнера и тёплый пол во всей квартире.</p>
       </article>
       <article class="proj">
-        <figure><img src="assets/img/proj-4.webp" width="900" height="1125" loading="lazy" decoding="async" alt="Частный дом в Истринском районе с панорамными окнами"></figure>
+        <figure><img src="assets/img/proj-4.webp" width="900" height="1125" loading="lazy" decoding="async" alt="Гостиная частного дома в Истринском районе с панорамными окнами и печью"></figure>
         <h3>Дом в Истринском районе</h3>
         <div class="meta"><span>180 м²</span><span>9 месяцев</span><span>Газобетон</span></div>
         <p>Фундамент, коробка, кровля и инженерия. Заселились к новому году, как планировали.</p>
@@ -619,11 +630,11 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
         </figure>
         <div class="rev-side">
           <figure class="rev-card rv">
-            <blockquote>«Каждый вечер приходили фото. Я два месяца был в командировке и ни разу не приезжал на объект.»</blockquote>
+            <blockquote>«Каждый вечер приходили фото. Я два месяца был в командировке и ни разу не приезжал на объект.»</blockquote>
             <figcaption><cite>Артём Белов<span>студия на Ходынке</span></cite></figcaption>
           </figure>
           <figure class="rev-card rv">
-            <blockquote>«Перепланировку согласовали до начала работ, хотя я был уверен, что это затянется на полгода.»</blockquote>
+            <blockquote>«Перепланировку согласовали до начала работ, хотя я был уверен, что это затянется на полгода.»</blockquote>
             <figcaption><cite>Олег Кравченко<span>трёшка на Соколе</span></cite></figcaption>
           </figure>
         </div>
@@ -689,7 +700,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
     <div class="foot-grid">
       <div><p style="max-width:28ch;color:var(--ink-2)">Ремонт квартир и строительство домов в Москве и Подмосковье.</p></div>
       <div><h3>Разделы</h3><ul><li><a href="#process">Этапы</a></li><li><a href="#price">Цены</a></li><li><a href="#projects">Объекты</a></li><li><a href="#faq">Вопросы</a></li></ul></div>
-      <div><h3>Контакты</h3><ul><li><a href="tel:+74950000000">+7 495 000-00-00</a></li><li><a href="mailto:hello@rovno.example">hello@rovno.example</a></li><li>Ежедневно 9:00-21:00</li></ul></div>
+      <div><h3>Контакты</h3><ul><li><a href="tel:+74950000000">+7 495 000-00-00</a></li><li><a href="mailto:hello@rovno.example">hello@rovno.example</a></li><li>Ежедневно 9:00–21:00</li></ul></div>
       <div><h3>Документы</h3><ul><li><a href="politika.html">Политика конфиденциальности</a></li><li><a href="soglasie.html">Согласие на обработку данных</a></li></ul></div>
     </div>
     <div class="disclaimer">
@@ -747,24 +758,33 @@ ready.then(() => {
   $$('.clause').forEach(c => clauseIo.observe(c));
 });
 
-const stageEl = $('#stage'), lab = $('#lab'), steps = $$('.step'), navBtns = $$('#stageNav button');
+const stageEl = $('#stage'), lab = $('#lab'), steps = $$('.step'), navBtns = $$('#stageNav button'), stageNav = $('#stageNav');
+const narrow = matchMedia('(max-width: 899px)');
 let scene = null, current = 6, heroOn = true;
 function apply() {
   if (scene) scene.setStage(heroOn ? 6 : current, { hero: heroOn });
   navBtns.forEach(b => { if (!heroOn && +b.dataset.go === current) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
   steps.forEach(s => s.classList.toggle('active', !heroOn && +s.dataset.stage === current));
   lab.classList.toggle('in-process', !heroOn);
+  const on = navBtns[current];
+  if (narrow.matches && !heroOn && on) stageNav.scrollTo({ left: on.offsetLeft - (stageNav.clientWidth - on.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
 }
 const stepIo = new IntersectionObserver(es => {
   es.forEach(e => { if (e.isIntersecting) { current = +e.target.dataset.stage; heroOn = false; apply(); } });
-}, { rootMargin: '-48% 0px -48% 0px' });
+}, { rootMargin: narrow.matches ? '-66% 0px -32% 0px' : '-48% 0px -48% 0px' });
 steps.forEach(s => stepIo.observe(s));
 new IntersectionObserver(([e]) => { if (e.isIntersecting) { heroOn = true; apply(); } }, { rootMargin: '-48% 0px -48% 0px' }).observe($('#top'));
-navBtns.forEach(b => b.addEventListener('click', () => $('#step-' + b.dataset.go).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' })));
+navBtns.forEach(b => b.addEventListener('click', () => {
+  const st = $('#step-' + b.dataset.go);
+  if (narrow.matches) scrollTo({ top: st.getBoundingClientRect().top + scrollY - stageEl.offsetHeight - 24, behavior: reduce ? 'auto' : 'smooth' });
+  else st.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+}));
 stageEl.addEventListener('model-interact', () => stageEl.classList.add('touched'));
 
 const HOTSPOTS = [
-  { stage: 0, x: -1.6, y: 1.4, z: 1.0, label: 'Обмер лазером за один визит' },
+  { stage: 0, x: -1.6, y: 1.3, z: -1.0, label: 'Обмер лазером за один визит' },
+  { stage: 0, x: 0, y: 0.06, z: 3.75, label: '9,0 м' },
+  { stage: 0, x: 5.05, y: 0.06, z: 0, label: '6,4 м' },
   { stage: 1, x: 0.2, y: 0.05, z: 1.4, label: 'Демонтаж до бетона' },
   { stage: 2, x: -2.4, y: 1.4, z: -0.2, label: 'Газобетон 100 мм' },
   { stage: 2, x: 2.4, y: 1.4, z: 1.1, label: 'Проёмы по проекту' },
@@ -815,15 +835,17 @@ const area = $('#area'), areaNum = $('#areaNum');
 const plural = (n, a, b, c) => { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 12 || h > 14) ? b : c; };
 const shown = { total: 0 };
 let tween = 0;
+new IntersectionObserver(([e]) => $('.calc-bar').classList.toggle('off', e.isIntersecting), { rootMargin: '0px 0px 2% 0px' }).observe($('.calc-out'));
 function animateTo(el, to) {
   const from = shown.total;
   shown.total = to;
-  if (reduce) { el.textContent = fmt(to) + ' ₽'; return; }
+  const bar = $('#totalBar');
+  if (reduce) { el.textContent = bar.textContent = fmt(to) + ' ₽'; return; }
   cancelAnimationFrame(tween);
   const t0 = performance.now();
   const step = now => {
     const p = Math.min(1, (now - t0) / 300), e = 1 - Math.pow(1 - p, 3);
-    el.textContent = fmt(from + (to - from) * e) + ' ₽';
+    el.textContent = bar.textContent = fmt(from + (to - from) * e) + ' ₽';
     if (p < 1) tween = requestAnimationFrame(step);
   };
   tween = requestAnimationFrame(step);
@@ -840,7 +862,7 @@ function calc() {
   const half = Math.round(months * 2) / 2;
   $('#term').textContent = months < 2.6 ? `${weeks} ${plural(weeks, 'неделя', 'недели', 'недель')}` : Number.isInteger(half) ? `${half} ${plural(half, 'месяц', 'месяца', 'месяцев')}` : `${String(half).replace('.', ',')} месяца`;
   const [m0, m1] = MAT[lvl].map(v => v * a / 1e6);
-  $('#mat').textContent = m1 < 1 ? `${fmt(m0 * 1000)}-${fmt(m1 * 1000)} тыс. ₽` : `${m0.toFixed(1).replace('.', ',')}-${m1.toFixed(1).replace('.', ',')} млн ₽`;
+  $('#mat').textContent = m1 < 1 ? `${fmt(m0 * 1000)}–${fmt(m1 * 1000)} тыс. ₽` : `${m0.toFixed(1).replace('.', ',')}–${m1.toFixed(1).replace('.', ',')} млн ₽`;
   area.style.setProperty('--p', ((a - 20) / 230 * 100) + '%');
   $('#fCalc').value = `${a} м², ${lvl}, ${old ? 'вторичка' : 'новостройка'}${design ? ', дизайн-проект' : ''}`;
   if (!$('#fArea').value || $('#fArea').dataset.auto) { $('#fArea').value = a; $('#fArea').dataset.auto = '1'; }

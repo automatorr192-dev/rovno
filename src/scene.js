@@ -3,7 +3,7 @@ import {
   CylinderGeometry, SphereGeometry, MeshStandardMaterial, ShadowMaterial, HemisphereLight,
   DirectionalLight, Vector3, Plane, CurvePath, LineCurve3, TubeGeometry, InstancedMesh,
   Object3D, Color, CanvasTexture, RepeatWrapping, SRGBColorSpace, PCFShadowMap,
-  NeutralToneMapping, DoubleSide, PMREMGenerator, Box3
+  NeutralToneMapping, DoubleSide, PMREMGenerator, Box3, MeshBasicMaterial
 } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -92,8 +92,8 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
   scene.environmentIntensity = 0.35;
   pmrem.dispose();
-  scene.add(new HemisphereLight('#ffffff', '#aeaca5', 0.75));
-  const sun = new DirectionalLight('#fffaf2', 2.0);
+  scene.add(new HemisphereLight('#ffffff', '#aeaca5', 0.62));
+  const sun = new DirectionalLight('#fffaf2', 2.3);
   sun.position.set(5, 11, 7);
   sun.castShadow = true;
   const sm = coarse ? 1024 : 2048;
@@ -124,7 +124,7 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
     block: clipped(std('#ffffff', 0.95, { map: blockTex() }), partClip),
     plaster: clipped(std('#f2f2ee', 0.88), plasterClip),
     screed: std('#c4c3bd', 0.95),
-    oldWall: clipped(std('#c9c3a2', 0.9), oldClip),
+    oldWall: clipped(std('#cfb59b', 0.9), oldClip),
     oldFloor: std('#7b6352', 0.7, { transparent: true }),
     oldWood: std('#6a4b35', 0.7),
     oldFabric: std('#8c6f5e', 0.95),
@@ -366,16 +366,20 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
     return g;
   };
   const chair = (x, z, r) => piece(x, z, [rbox(0.44, 0.46, 0.44, 0.07, M.fabricDark, 0, 0, 0), rbox(0.44, 0.42, 0.07, 0.03, M.fabricDark, 0, 0.42, -0.19)], r);
-  const plantP = (x, z, s = 1) => piece(x, z, [
-    cyl(0.17 * s, 0.38 * s, M.pot, 0, 0, 0),
-    new Mesh(new SphereGeometry(0.3 * s, 14, 10), M.plant),
-    new Mesh(new SphereGeometry(0.22 * s, 12, 9), M.plantDark),
-  ]);
-  const placeLeaves = g => {
-    const [, a, b] = g.children;
-    a.position.set(0, 0.62 * (g.children[0].geometry.parameters.height / 0.38), 0);
-    b.position.set(0.12, 0.85 * (g.children[0].geometry.parameters.height / 0.38), -0.06);
-    a.castShadow = b.castShadow = true;
+  const leafGeo = new SphereGeometry(1, 12, 8);
+  const plantP = (x, z, s = 1) => {
+    const parts = [cyl(0.15 * s, 0.34 * s, M.pot, 0, 0, 0, 20), cyl(0.012 * s, 0.62 * s, M.plantDark, 0, 0.3 * s, 0, 6)];
+    for (let i = 0; i < 11; i++) {
+      const k = i / 11, a = i * 2.39996, tilt = 0.35 + (1 - k) * 0.6, len = (0.17 + 0.07 * Math.sin(i * 1.7)) * s;
+      const leaf = new Mesh(leafGeo, i % 3 ? M.plant : M.plantDark);
+      leaf.scale.set(0.07 * s, 0.01 * s, len);
+      leaf.rotation.set(-tilt, a, 0, 'YXZ');
+      const r = len * 0.85 * Math.cos(tilt);
+      leaf.position.set(Math.sin(a) * r, (0.4 + k * 0.5) * s + Math.sin(tilt) * len * 0.85, Math.cos(a) * r);
+      leaf.castShadow = true;
+      parts.push(leaf);
+    }
+    return piece(x, z, parts);
   };
 
   piece(-2.72, zA + PL + 0.3, [
@@ -404,7 +408,7 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   piece(0.6, 1.72, [cyl(0.42, 0.04, M.stone, 0, 0.36, 0, 32), cyl(0.06, 0.36, M.metal, 0, 0, 0, 12)]);
   piece(1.98, 2.92, [cyl(0.12, 0.03, M.metal, 0, 0, 0, 16), cyl(0.012, 1.45, M.metal, 0, 0.03, 0, 8), new Mesh(new CylinderGeometry(0.13, 0.19, 0.24, 20, 1, true), M.shade)]);
   furniture[furniture.length - 1].children[2].position.y = 1.55;
-  placeLeaves(plantP(-4.08, 2.78, 1.1));
+  plantP(-4.0, 2.6, 1.05);
 
   piece(-2.2, Z0 + PL + 1.09, [
     rbox(1.7, 0.3, 2.1, 0.04, M.darkWood, 0, 0, 0),
@@ -419,7 +423,7 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   piece(-1.0, Z0 + PL + 0.22, [rbox(0.46, 0.46, 0.42, 0.02, M.oak, 0, 0, 0)]);
   piece(0.6 - TP / 2 - PL - 0.31, -2.15, [rbox(0.6, CUT, 1.9, 0.015, M.lac, 0, 0, 0)]);
   piece(-2.2, -1.35, [rbox(2.2, 0.012, 1.3, 0.004, M.rug, 0, 0, 0)]);
-  placeLeaves(plantP(-0.25, -0.6, 0.9));
+  plantP(-0.25, -0.6, 0.9);
 
   piece(1.52, Z0 + PL + 0.38, [rbox(1.7, 0.56, 0.75, 0.09, M.porcelain, 0, 0, 0), rbox(1.46, 0.03, 0.52, 0.02, std('#e4ecef', 0.2), 0, 0.53, 0)]);
   piece(2.66, -1.95, [rbox(0.4, 0.4, 0.56, 0.14, M.porcelain, -0.04, 0, 0), rbox(0.16, 0.36, 0.4, 0.04, M.porcelain, 0.16, 0.38, 0)]);
@@ -431,7 +435,55 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   piece(X1 - PL - 0.18, 0.2, [rbox(0.36, 0.44, 1.2, 0.02, M.oak, 0, 0, 0)]);
   piece(2.4 + TP / 2 + PL + 0.31, 2.6, [rbox(0.6, CUT, 1.1, 0.015, M.lac, 0, 0, 0)]);
   piece(3.95, 2.05, [rbox(0.9, 0.012, 0.6, 0.004, M.fabricDark, 0, 0, 0)]);
-  placeLeaves(plantP(4.15, -0.55, 0.85));
+  plantP(4.15, -0.55, 0.85);
+
+  // Мягкая контактная тень под каждым предметом: без неё мебель «висит» над полом.
+  const aoTex = (() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 128;
+    const g = c.getContext('2d'), r = g.createRadialGradient(64, 64, 8, 64, 64, 64);
+    r.addColorStop(0, 'rgba(0,0,0,1)');
+    r.addColorStop(0.55, 'rgba(0,0,0,.55)');
+    r.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = r;
+    g.fillRect(0, 0, 128, 128);
+    return new CanvasTexture(c);
+  })();
+  const aoMat = new MeshBasicMaterial({ color: '#000000', map: aoTex, transparent: true, opacity: 0.42, depthWrite: false });
+  furniture.forEach(g => {
+    const b = new Box3();
+    g.children.forEach(c => { c.geometry.computeBoundingBox(); c.updateMatrix(); b.union(c.geometry.boundingBox.clone().applyMatrix4(c.matrix)); });
+    if (b.max.y - b.min.y < 0.05) return;
+    const ao = new Mesh(new PlaneGeometry(1, 1), aoMat);
+    ao.rotation.x = -Math.PI / 2;
+    ao.scale.set((b.max.x - b.min.x) * 1.3 + 0.25, (b.max.z - b.min.z) * 1.3 + 0.25, 1);
+    ao.position.set((b.min.x + b.max.x) / 2, 0.016, (b.min.z + b.max.z) / 2);
+    ao.renderOrder = 1;
+    ao.userData.contact = true;
+    g.add(ao);
+  });
+
+  // Замер: размерные линии по периметру и лазерный дальномер, чтобы этап не путался с перегородками.
+  const measure = new Group();
+  model.add(measure);
+  const bar = (w, d, x, y, z) => { const m = box(w, 0.012, d, M.accent, x, y, z, false); measure.add(m); return m; };
+  const dz = Z1 + 0.55, dx = X1 + 0.55;
+  bar(X1 - X0, 0.012, 0, 0.02, dz);
+  [X0, X1].forEach(x => { bar(0.012, 0.3, x, 0.02, dz); bar(0.008, 0.6, x, 0.02, Z1 + 0.3); });
+  bar(0.012, Z1 - Z0, dx, 0.02, 0);
+  [Z0, Z1].forEach(z => { bar(0.3, 0.012, dx, 0.02, z); bar(0.6, 0.008, X1 + 0.3, 0.02, z); });
+  const lx = -1.6, lz = -1.0, ly = 1.12;
+  [0, 2.09, 4.19].forEach(a => {
+    const leg = cyl(0.01, 1.12, M.metal, lx + Math.sin(a) * 0.16, 0.065, lz + Math.cos(a) * 0.16, 6);
+    leg.rotation.set(Math.cos(a) * -0.14, 0, Math.sin(a) * 0.14);
+    measure.add(leg);
+  });
+  measure.add(rbox(0.14, 0.09, 0.09, 0.015, M.accentDeep, lx, ly, lz));
+  bar(lx - X0 - 0.07, 0.006, (X0 + 0.06 + lx) / 2, ly + 0.035, lz);
+  bar(0.006, lz - Z0 - 0.07, lx, ly + 0.035, (Z0 + 0.06 + lz) / 2);
+  [[X0 + 0.065, lz], [lx, Z0 + 0.065]].forEach(([x, z]) => { const m = new Mesh(new SphereGeometry(0.035, 12, 8), M.accent); m.position.set(x, ly + 0.04, z); measure.add(m); });
+  measure.children.forEach((m, i) => { m.userData.d = i / measure.children.length; m.userData.s = m.scale.clone(); });
+
 
   const tracks = {
     old: { t: 1, target: 1, dur: 0.9, order: 0 },
@@ -460,6 +512,9 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
       m.scale.setScalar(Math.max(0.0001, easeOut(l)));
       m.position.y = m.userData.base.y + (1 - l) * 0.3;
     });
+
+    measure.visible = o > 0.001;
+    measure.children.forEach(m => m.scale.copy(m.userData.s).multiplyScalar(Math.max(0.0001, easeOut(stagger(o, m.userData.d, 0.5)))));
 
     partitions.visible = p > 0.001;
     partClip.constant = easeInOut(p) * (CUT + 0.01);
@@ -542,16 +597,31 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   const tmp = new Vector3();
   const stageTrackKey = ['old', 'old', 'parts', 'eng', 'rough', 'floors', 'furn'];
   function updateHotspots(w, h) {
+    const placed = [];
     hsEls.forEach(hs => {
       const k = tracks[stageTrackKey[hs.stage]];
       const settled = hs.stage === 1 ? tracks.old.t < 0.02 && tracks.parts.t < 0.02 : k.t > 0.9;
-      const on = !heroMode && hs.stage === stage && settled;
+      let on = !heroMode && hs.stage === stage && settled, flip = false, below = false, dx = 0, px = 0, py = 0;
+      if (on) {
+        tmp.copy(hs.v).applyMatrix4(model.matrixWorld).project(camera);
+        px = (tmp.x + 1) / 2 * w;
+        py = (1 - tmp.y) / 2 * h;
+        // Подпись не должна вылезать за край сцены и наезжать на соседнюю: тогда переворачиваем, сдвигаем или прячем.
+        const label = hs.el.lastChild, lw = hs.lw || (hs.lw = label.offsetWidth), lh = hs.lh || (hs.lh = label.offsetHeight);
+        flip = px + 14 + lw > w - 8 || (px > w * 0.58 && px - 14 - lw >= 8);
+        const x0 = flip ? px - 14 - lw : px + 14, cx = Math.min(Math.max(x0, 8), w - 8 - lw);
+        dx = cx - x0;
+        below = py - 10 - lh < 96;
+        const ty = below ? py + 10 : py - 10 - lh, r = [cx - 6, ty - 6, cx + lw + 6, ty + lh + 6];
+        if (placed.some(q => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1])) on = false;
+        else placed.push(r);
+      }
       hs.el.classList.toggle('on', on);
       if (!on) return;
-      tmp.copy(hs.v).applyMatrix4(model.matrixWorld).project(camera);
-      const px = (tmp.x + 1) / 2 * w;
-      hs.el.classList.toggle('flip', px > w * 0.58);
-      hs.el.style.transform = `translate3d(${px.toFixed(1)}px, ${((1 - tmp.y) / 2 * h).toFixed(1)}px, 0)`;
+      hs.el.classList.toggle('flip', flip);
+      hs.el.classList.toggle('below', below);
+      hs.el.lastChild.style.translate = dx ? `${dx.toFixed(1)}px 0` : '';
+      hs.el.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0)`;
     });
   }
 
@@ -664,7 +734,8 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
       const out = [];
       furniture.forEach((g, i) => {
         if (!g.visible) return;
-        const b = new Box3().setFromObject(g);
+        const b = new Box3();
+        g.children.forEach(c => { if (!c.userData.contact) b.expandByObject(c); });
         if (b.min.x < X0 + PL - 0.005 || b.max.x > X1 - PL + 0.005 || b.min.z < Z0 + PL - 0.005 || b.max.z > Z1 - PL + 0.005) {
           out.push({ i, x: [b.min.x, b.max.x].map(v => +v.toFixed(2)), z: [b.min.z, b.max.z].map(v => +v.toFixed(2)) });
         }
