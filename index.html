@@ -688,7 +688,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
         <div class="form-fields" style="display:grid;gap:1.4rem">
           <div class="f-row">
             <div class="f"><label for="fName">Имя</label><input id="fName" name="name" autocomplete="given-name" required><p class="msg" id="fNameMsg" aria-live="polite"></p></div>
-            <div class="f"><label for="fPhone">Телефон</label><input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 900 000-00-00" required><p class="msg" id="fPhoneMsg" aria-live="polite"></p></div>
+            <div class="f"><label for="fPhone">Телефон</label><input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required><p class="msg" id="fPhoneMsg" aria-live="polite"></p></div>
           </div>
           <div class="f-row">
             <div class="f"><label for="fArea">Площадь <span>необязательно</span></label><input id="fArea" name="area" inputmode="numeric" placeholder="Например, 64"></div>
@@ -721,7 +721,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
       <div><h3>Документы</h3><ul><li><a href="politika.html">Политика конфиденциальности</a></li><li><a href="soglasie.html">Согласие на обработку данных</a></li></ul></div>
     </div>
     <div class="disclaimer">
-      <p>Демонстрационный проект для портфолио. Компания «Ровно», объекты, цены и отзывы вымышлены, заявки никуда не отправляются.</p>
+      <p>Это концепт сайта для портфолио: компании «Ровно» нет, объекты и отзывы придуманы, а заявка остаётся в браузере.</p>
       <p>Дизайн и разработка: <a href="https://instagram.com/automatorrr" rel="noopener">@automatorrr</a></p>
     </div>
   </div>
@@ -917,8 +917,8 @@ function check(id, ok, text) {
 }
 form.addEventListener('submit', e => {
   e.preventDefault();
-  const okName = check('fName', $('#fName').value.trim().length > 1, 'Как к вам обращаться?');
-  const okPhone = check('fPhone', phone.value.replace(/\D/g, '').length === 11, 'Нужен номер из 11 цифр');
+  const okName = check('fName', $('#fName').value.trim().length > 1, 'Напишите имя: инженер позвонит и представится');
+  const okPhone = check('fPhone', phone.value.replace(/\D/g, '').length === 11, 'В номере не хватает цифр, проверьте');
   const okConsent = check('fConsent', $('#fConsent').checked, 'Без согласия мы не можем перезвонить');
   if (!(okName && okPhone && okConsent)) { form.querySelector('[aria-invalid="true"]').focus(); return; }
   $('#okText').textContent = `${$('#fName').value.trim()}, спасибо. Это демо-сайт, поэтому заявка никуда не отправилась. В рабочей версии менеджер перезвонит в течение 15 минут и передаст расчёт инженеру.`;
