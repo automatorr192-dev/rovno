@@ -103,7 +103,8 @@ h1,h2,h3{font-weight:560; letter-spacing:-.035em; line-height:1.02; text-wrap:ba
 h2{font-size:clamp(2.1rem, 3.1vw + .9rem, 3rem)}
 h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 .lead{font-size:1.1875rem; line-height:1.5; color:var(--ink-2); max-width:34ch}
-.sec{padding:8rem 0}
+.sec{padding:6.5rem 0}
+@media (max-width:899px){.sec{padding:4.5rem 0}}
 .sec-head{max-width:40rem; margin-bottom:3.5rem}
 .sec-head p{margin-top:1.1rem; color:var(--mut); max-width:46ch}
 
@@ -135,7 +136,7 @@ h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 .burger span:first-child{top:1.05rem} .burger span:last-child{top:1.55rem}
 .burger[aria-expanded="true"] span:first-child{transform:translateY(.25rem) rotate(45deg)}
 .burger[aria-expanded="true"] span:last-child{transform:translateY(-.25rem) rotate(-45deg)}
-.menu{position:fixed; inset:var(--nav-h) 0 auto; z-index:49; background:var(--bg); border-bottom:1px solid var(--line); padding:1rem var(--gut) 1.5rem; display:grid; gap:.25rem; opacity:0; transform:translateY(-.5rem); pointer-events:none; transition:opacity .2s var(--snap), transform .25s var(--snap)}
+.menu{position:fixed; inset:var(--nav-h) 0 0; z-index:49; background:var(--bg); padding:1rem var(--gut) 1.5rem; display:grid; align-content:start; overflow-y:auto; gap:.25rem; opacity:0; transform:translateY(-.5rem); pointer-events:none; transition:opacity .2s var(--snap), transform .25s var(--snap)}
 .menu.open{opacity:1; transform:none; pointer-events:auto}
 .menu a{padding:.85rem 0; font-size:1.25rem; border-bottom:1px solid var(--line)}
 .menu .btn{margin-top:1rem}
@@ -145,7 +146,8 @@ h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 .lab{display:grid; grid-template-columns:minmax(0,5.4fr) minmax(0,6.6fr); position:relative}
 .lab-copy{padding-left:var(--gut); padding-right:3rem}
 .lab-stage{position:relative}
-.stage{position:sticky; top:0; height:100svh; overflow:hidden; background:radial-gradient(120% 90% at 60% 40%, #f1f1ed 0%, var(--bg-2) 70%)}
+.stage{position:sticky; top:0; height:100svh; overflow:hidden; background:radial-gradient(120% 90% at 60% 40%, #f1f1ed 0%, var(--bg) 72%)}
+@media (min-width:900px){.stage canvas,.stage .poster{-webkit-mask-image:linear-gradient(90deg, transparent, #000 9%); mask-image:linear-gradient(90deg, transparent, #000 9%)}}
 .stage canvas{position:absolute; inset:0; width:100%; height:100%; opacity:0; transition:opacity .8s var(--ease); touch-action:pan-y; cursor:grab}
 .stage canvas:active{cursor:grabbing}
 .stage.live canvas{opacity:1}
@@ -194,7 +196,7 @@ h3{font-size:1.375rem; letter-spacing:-.02em; line-height:1.15}
 @media (max-width:899px){
   .lab{grid-template-columns:1fr}
   .lab-stage{order:-1; position:sticky; top:0; z-index:5; height:46svh}
-  .lab-stage::after{content:""; position:absolute; left:0; right:0; top:100%; height:2.5rem; background:linear-gradient(var(--bg-2), rgba(233,233,229,0)); pointer-events:none}
+  .lab-stage::after{content:""; position:absolute; left:0; right:0; top:100%; height:2.5rem; background:linear-gradient(var(--bg), rgba(233,233,229,0)); pointer-events:none}
   .stage{position:relative; height:46svh}
   .lab-copy{padding:0 var(--gut)}
   .hero{min-height:auto; padding:2rem 0 3rem}
@@ -354,8 +356,13 @@ cite span{display:block; color:var(--mut); font-size:.85rem; margin-top:.15rem}
 @media (max-width:899px){.zamer{grid-template-columns:1fr; gap:2.5rem} .form{padding:1.5rem} .f-row{grid-template-columns:1fr}}
 
 .foot{padding:6rem 0 2.5rem; border-top:1px solid var(--line)}
-.foot-word{font-size:clamp(5rem, 17vw, 17rem); font-weight:600; letter-spacing:-.07em; line-height:.8; margin-left:-.05em}
-.foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:2rem; margin-top:4rem}
+.foot-top{display:flex; justify-content:space-between; align-items:flex-end; gap:2rem 4rem; flex-wrap:wrap; padding-bottom:3.5rem; border-bottom:1px solid var(--line)}
+.foot-say{font-size:clamp(1.9rem, 2.4vw + .6rem, 3.2rem); font-weight:560; letter-spacing:-.035em; line-height:1.08; max-width:20ch}
+.foot-call{display:grid; gap:.35rem; text-align:right}
+.foot-call a{font-size:clamp(1.5rem, 1.4vw + .8rem, 2.2rem); font-weight:560; letter-spacing:-.03em; color:var(--accent)}
+.foot-call span{color:var(--mut); font-size:.95rem}
+@media (max-width:599px){.foot-call{text-align:left}}
+.foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:2rem; margin-top:3rem}
 .foot-grid h3{font-size:.85rem; font-weight:500; letter-spacing:0; color:var(--mut); margin-bottom:1rem}
 .foot-grid li+li{margin-top:.5rem}
 .foot-grid a{transition:color .2s}
@@ -431,36 +438,43 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
           <p class="rv">Модель повторяет каждый этап так, как он выглядит на реальном объекте.</p>
         </div>
         <article class="step" data-stage="0" id="step-0">
+          <p class="phase">Этап 1 · Замер</p>
           <h3>Замеряем</h3>
           <p>Инженер приезжает в удобное время, обмеряет квартиру лазером и проверяет стены, полы и стояки. Через три дня вы получаете смету с ценой каждой работы.</p>
           <dl><div><dt>Выезд</dt><dd>бесплатно</dd></div><div><dt>Смета</dt><dd>за 3 дня</dd></div></dl>
         </article>
         <article class="step" data-stage="1" id="step-1">
+          <p class="phase">Этап 2 · Демонтаж</p>
           <h3>Разбираем</h3>
           <p>Снимаем старые полы, плитку и перегородки до бетона. Подъезд и лифт застилаем плёнкой, мусор вывозим в день демонтажа.</p>
           <dl><div><dt>Срок</dt><dd>от 5 дней</dd></div><div><dt>Вывоз мусора</dt><dd>входит в смету</dd></div></dl>
         </article>
         <article class="step" data-stage="2" id="step-2">
+          <p class="phase">Этап 3 · Перегородки</p>
           <h3>Возводим</h3>
           <p>Строим перегородки из газобетона по дизайн-проекту. Кладку армируем, над каждым проёмом ставим перемычку.</p>
           <dl><div><dt>Блок</dt><dd>газобетон 100 мм</dd></div><div><dt>Проёмы</dt><dd>по проекту</dd></div></dl>
         </article>
         <article class="step" data-stage="3" id="step-3">
+          <p class="phase">Этап 4 · Инженерия</p>
           <h3>Прокладываем</h3>
           <p>Разводим электрику и воду. Перед тем как закрыть трассы, при вас проверяем трубы давлением и прозваниваем каждую линию.</p>
           <dl><div><dt>Кабель</dt><dd>ВВГнг-LS</dd></div><div><dt>Трубы</dt><dd>сшитый полиэтилен</dd></div></dl>
         </article>
         <article class="step" data-stage="4" id="step-4">
+          <p class="phase">Этап 5 · Черновая</p>
           <h3>Выравниваем</h3>
           <p>Заливаем стяжку и штукатурим стены по маякам. Каждую плоскость проверяем двухметровым правилом, результат видно в вечернем отчёте.</p>
           <dl><div><dt>Контроль</dt><dd>правило 2 м</dd></div><div><dt>Отчёт</dt><dd>каждый вечер</dd></div></dl>
         </article>
         <article class="step" data-stage="5" id="step-5">
+          <p class="phase">Этап 6 · Чистовая</p>
           <h3>Отделываем</h3>
           <p>Кладём полы и плитку, красим стены, ставим двери. Материалы закупаем по оптовым ценам и прикладываем чеки к отчёту.</p>
           <dl><div><dt>Материалы</dt><dd>по чекам</dd></div><div><dt>Скидка поставщика</dt><dd>остаётся вам</dd></div></dl>
         </article>
         <article class="step" data-stage="6" id="step-6">
+          <p class="phase">Этап 7 · Сдача</p>
           <h3>Сдаём</h3>
           <p>Ставим сантехнику и свет, собираем мебель, делаем клининг. Подписываем акт, и с этого дня действует гарантия.</p>
           <dl><div><dt>Гарантия</dt><dd>3 года</dd></div><div><dt>Клининг</dt><dd>включён</dd></div></dl>
@@ -502,7 +516,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
           </div>
         </article>
         <article class="svc-card rv">
-          <figure><img src="assets/img/svc-house.webp" srcset="assets/img/svc-house-800.webp 800w, assets/img/svc-house.webp 1400w" sizes="(max-width: 899px) 100vw, 45vw" width="1400" height="718" loading="lazy" decoding="async" alt="Стройка частного дома: стены из блоков и леса вокруг"></figure>
+          <figure><img src="assets/img/svc-house.webp" srcset="assets/img/svc-house-800.webp 800w, assets/img/svc-house.webp 1400w" sizes="(max-width: 899px) 100vw, 45vw" width="1400" height="718" loading="lazy" decoding="async" alt="Каркасный дом с тёмным деревянным фасадом среди лиственниц"></figure>
           <div class="svc-body">
             <h3>Строительство домов</h3>
             <p>Газобетон и каркас, от фундамента до чистовой отделки.</p>
@@ -582,7 +596,7 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
         <p>Объединили кухню с комнатой и перенесли санузел, перепланировку согласовали до старта.</p>
       </article>
       <article class="proj">
-        <figure><img src="assets/img/proj-2.webp" width="900" height="1125" loading="lazy" decoding="async" alt="Компактная студия на Ходынке со спальной зоной у окна"></figure>
+        <figure><img src="assets/img/proj-2.webp" width="900" height="1125" loading="lazy" decoding="async" alt="Студия на Ходынке: спальня за стеклянной перегородкой и рабочее место у окна"></figure>
         <h3>Студия на Ходынке</h3>
         <div class="meta"><span>41 м²</span><span>10 недель</span><span>Базовый</span></div>
         <p>Ремонт под сдачу: износостойкие материалы и мебель, которую легко обслуживать.</p>
@@ -696,7 +710,10 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
 
 <footer class="foot">
   <div class="wrap">
-    <div class="foot-word" aria-hidden="true">Ровно</div>
+    <div class="foot-top">
+      <p class="foot-say">Цена в договоре окончательная. Инженер приедет на замер уже завтра.</p>
+      <div class="foot-call"><a href="tel:+74950000000">+7 495 000-00-00</a><span>звонки с 9:00 до 21:00</span></div>
+    </div>
     <div class="foot-grid">
       <div><p style="max-width:28ch;color:var(--ink-2)">Ремонт квартир и строительство домов в Москве и Подмосковье.</p></div>
       <div><h3>Разделы</h3><ul><li><a href="#process">Этапы</a></li><li><a href="#price">Цены</a></li><li><a href="#projects">Объекты</a></li><li><a href="#faq">Вопросы</a></li></ul></div>
@@ -761,8 +778,10 @@ ready.then(() => {
 const stageEl = $('#stage'), lab = $('#lab'), steps = $$('.step'), navBtns = $$('#stageNav button'), stageNav = $('#stageNav');
 const narrow = matchMedia('(max-width: 899px)');
 let scene = null, current = 6, heroOn = true;
+let stageT = 0;
 function apply() {
-  if (scene) scene.setStage(heroOn ? 6 : current, { hero: heroOn });
+  clearTimeout(stageT);
+  stageT = setTimeout(() => { if (scene) scene.setStage(heroOn ? 6 : current, { hero: heroOn }); }, 110);
   navBtns.forEach(b => { if (!heroOn && +b.dataset.go === current) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
   steps.forEach(s => s.classList.toggle('active', !heroOn && +s.dataset.stage === current));
   lab.classList.toggle('in-process', !heroOn);
@@ -821,8 +840,6 @@ function loadScene() {
 }
 if (webgl()) {
   stageEl.addEventListener('model-lost', fallback);
-  // Постер готовой квартиры весит 11 КБ и виден сразу. Сцена (147 КБ) догружается после
-  // загрузки страницы, когда браузер свободен, и подменяет постер плавно.
   const later = () => ('requestIdleCallback' in window ? requestIdleCallback(loadScene, { timeout: 1500 }) : setTimeout(loadScene, 200));
   if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
 } else fallback();

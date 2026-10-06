@@ -437,7 +437,6 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   piece(3.95, 2.05, [rbox(0.9, 0.012, 0.6, 0.004, M.fabricDark, 0, 0, 0)]);
   plantP(4.15, -0.55, 0.85);
 
-  // Мягкая контактная тень под каждым предметом: без неё мебель «висит» над полом.
   const aoTex = (() => {
     const c = document.createElement('canvas');
     c.width = c.height = 128;
@@ -463,7 +462,6 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
     g.add(ao);
   });
 
-  // Замер: размерные линии по периметру и лазерный дальномер, чтобы этап не путался с перегородками.
   const measure = new Group();
   model.add(measure);
   const bar = (w, d, x, y, z) => { const m = box(w, 0.012, d, M.accent, x, y, z, false); measure.add(m); return m; };
@@ -556,7 +554,7 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
     });
   }
 
-  let stage = 6, heroMode = true;
+  let stage = 6, heroMode = true, boost = 1, ema = 0.016;
   const GAP = 0.32;
   function setStage(s, opts = {}) {
     heroMode = !!opts.hero;
@@ -570,7 +568,9 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
       v.wait = opts.instant ? 0 : k === 'old' ? (up ? 0 : (hi - lo) * GAP * 0.75) : (up ? v.order - lo : hi - v.order) * GAP;
     });
     stage = s;
-    if (reduceMotion || opts.instant) Object.values(tracks).forEach(v => { v.t = v.target; v.wait = 0; });
+    const pending = Object.values(tracks).filter(v => v.t !== v.target).length;
+    boost = pending > 1 ? Math.min(3.5, pending * 0.9) : 1;
+    if (reduceMotion || opts.instant || ema > 0.07) { Object.values(tracks).forEach(v => { v.t = v.target; v.wait = 0; }); apply(); }
     kick();
   }
 
@@ -579,8 +579,8 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
     Object.values(tracks).forEach(v => {
       if (v.t === v.target) return;
       active = true;
-      if (v.wait > 0) { v.wait -= dt; return; }
-      const step = dt / v.dur;
+      if (v.wait > 0) { v.wait -= dt * boost; return; }
+      const step = dt * boost / v.dur;
       v.t = v.target > v.t ? Math.min(v.target, v.t + step) : Math.max(v.target, v.t - step * 1.6);
     });
     return active;
@@ -595,18 +595,15 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
     return { ...h, el, v: new Vector3(h.x, h.y, h.z) };
   });
   const tmp = new Vector3();
-  const stageTrackKey = ['old', 'old', 'parts', 'eng', 'rough', 'floors', 'furn'];
   function updateHotspots(w, h) {
     const placed = [];
     hsEls.forEach(hs => {
-      const k = tracks[stageTrackKey[hs.stage]];
-      const settled = hs.stage === 1 ? tracks.old.t < 0.02 && tracks.parts.t < 0.02 : k.t > 0.9;
+      const settled = Object.values(tracks).every(v => v.t === v.target);
       let on = !heroMode && hs.stage === stage && settled, flip = false, below = false, dx = 0, px = 0, py = 0;
       if (on) {
         tmp.copy(hs.v).applyMatrix4(model.matrixWorld).project(camera);
         px = (tmp.x + 1) / 2 * w;
         py = (1 - tmp.y) / 2 * h;
-        // Подпись не должна вылезать за край сцены и наезжать на соседнюю: тогда переворачиваем, сдвигаем или прячем.
         const label = hs.el.lastChild, lw = hs.lw || (hs.lw = label.offsetWidth), lh = hs.lh || (hs.lh = label.offsetHeight);
         flip = px + 14 + lw > w - 8 || (px > w * 0.58 && px - 14 - lw >= 8);
         const x0 = flip ? px - 14 - lw : px + 14, cx = Math.min(Math.max(x0, 8), w - 8 - lw);
@@ -694,7 +691,8 @@ export function createScene({ canvas, hotspotLayer, hotspots = [], accent = '#2b
   let raf = 0, last = 0, visible = true, dirty = true, first = true, slowSum = 0, slowN = 0, degraded = false;
   function frame(now) {
     raf = 0;
-    const dt = Math.min(0.1, (now - (last || now)) / 1000);
+    const raw = (now - (last || now)) / 1000, dt = Math.min(0.25, raw);
+    if (raw > 0) ema = ema * 0.85 + Math.min(raw, 0.5) * 0.15;
     last = now;
     if (!degraded && last && dt > 0) {
       slowSum += dt; slowN++;
