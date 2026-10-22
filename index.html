@@ -342,6 +342,10 @@ cite span{display:block; color:var(--mut); font-size:.85rem; margin-top:.15rem}
 .f input,.f select{width:100%; min-height:3.25rem; padding:0 1rem; border:1px solid var(--line-2); border-radius:var(--r); background:#fff; color:var(--ink); transition:border-color .2s var(--snap), box-shadow .2s var(--snap)}
 .f input::placeholder{color:#66686d}
 .f input:focus,.f select:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(43,68,230,.18)}
+.f textarea{width:100%; min-height:5.5rem; padding:.85rem 1rem; border:1px solid var(--line-2); border-radius:var(--r); background:#fff; color:var(--ink); font:inherit; resize:vertical; transition:border-color .2s var(--snap), box-shadow .2s var(--snap)}
+.f textarea:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(43,68,230,.18)}
+.ai-calc{display:grid; gap:.75rem; padding-bottom:1.5rem; border-bottom:1px solid var(--line-2)}
+.ai-calc p{margin:0; font-size:.9rem; color:var(--mut); min-height:1.2rem}
 .f.err input{border-color:#c62828}
 .f .msg{min-height:1.2rem; font-size:.85rem; color:#b3261e; margin-top:.35rem}
 .f-row{display:grid; grid-template-columns:1fr 1fr; gap:1rem}
@@ -543,6 +547,12 @@ html:not(.js) .ln > span, html:not(.js) .rv{transform:none; opacity:1}
       </div>
       <div class="calc">
         <form class="calc-form rv" id="calc" onsubmit="return false">
+          <div class="ai-calc f">
+            <label for="aiText">Опишите ремонт своими словами <span>ИИ выставит параметры сам</span></label>
+            <textarea id="aiText" maxlength="2000" placeholder="Например: двушка 54 метра во вторичке, хочу хороший ремонт с тёплым полом"></textarea>
+            <button type="button" class="btn btn-ghost" id="aiGo">Посчитать по описанию</button>
+            <p id="aiMsg" aria-live="polite"></p>
+          </div>
           <div>
             <div class="field-label"><label for="areaNum">Площадь квартиры</label><span class="area-out"><input id="areaNum" type="number" inputmode="numeric" min="20" max="250" value="64" aria-describedby="areaHint"> м²</span></div>
             <input id="area" type="range" min="20" max="250" step="1" value="64" aria-label="Площадь квартиры, квадратных метров">
@@ -889,6 +899,30 @@ function calc() {
 area.addEventListener('input', () => { areaNum.value = area.value; calc(); });
 areaNum.addEventListener('change', () => { const v = Math.max(20, Math.min(250, +areaNum.value || 20)); areaNum.value = v; area.value = v; calc(); });
 $('#calc').addEventListener('change', calc);
+const LEVEL = { base: 'базовый', comfort: 'комфорт', premium: 'премиум' };
+// Описание раскладывает по полям модель на сервере AI-CRM; цену по-прежнему считает калькулятор.
+$('#aiGo').addEventListener('click', async () => {
+  const text = $('#aiText').value.trim(), msg = $('#aiMsg'), go = $('#aiGo');
+  if (text.length < 10) { msg.textContent = 'Опишите чуть подробнее: площадь, новостройка или вторичка, какой ремонт.'; return; }
+  go.disabled = true;
+  msg.textContent = 'Модель читает описание… Если сервер спал, это до минуты.';
+  try {
+    const r = await fetch(CRM + '/api/public/estimate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail);
+    if (d.area) { areaNum.value = area.value = Math.max(20, Math.min(250, d.area)); }
+    if (d.home) $(`input[name=home][value=${d.home}]`).checked = true;
+    if (d.level) $(`input[name=lvl][value=${d.level}]`).checked = true;
+    if (d.design !== null) $('#design').checked = d.design;
+    calc();
+    const got = [d.area && `${d.area} м²`, d.home && (d.home === 'old' ? 'вторичка' : 'новостройка'), d.level && LEVEL[d.level], d.design !== null && (d.design ? 'с дизайн-проектом' : 'без дизайн-проекта')].filter(Boolean);
+    msg.textContent = (got.length ? `Понял так: ${got.join(', ')}. Поправьте ниже, если не так.` : 'Не нашёл в описании параметров — выставьте их ниже.') + (d.unclear ? ` ${d.unclear}.` : '');
+  } catch {
+    msg.textContent = 'Не получилось разобрать описание — выставьте параметры вручную.';
+  } finally {
+    go.disabled = false;
+  }
+});
 $('#fArea').addEventListener('input', e => delete e.target.dataset.auto);
 calc();
 
@@ -932,7 +966,7 @@ form.addEventListener('submit', e => {
     body: JSON.stringify({
       name,
       contact: phone.value,
-      text: `Замер. Расчёт: ${$('#fCalc').value || 'не считал'}. Площадь: ${$('#fArea').value || 'не указана'}. Созвониться: ${$('#fTime').value}`,
+      text: `Замер.${$('#aiText').value.trim() ? ` Описание: ${$('#aiText').value.trim()}.` : ''} Расчёт: ${$('#fCalc').value || 'не считал'}. Площадь: ${$('#fArea').value || 'не указана'}. Созвониться: ${$('#fTime').value}`,
       utm_source: 'rovno',
       consent: true,
     }),
